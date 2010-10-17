@@ -106,6 +106,8 @@ PROGRAM MONODOMAINEXAMPLE
   TYPE(CMISSBasisType) :: Basis
   TYPE(CMISSBoundaryConditionsType) :: BoundaryConditions
   TYPE(CMISSCellMLType) :: CellML
+  TYPE(CMISSCellMLEquationsType) :: CellMLEquations
+  TYPE(CMISSControlLoopType) :: ControlLoop
   TYPE(CMISSCoordinateSystemType) :: CoordinateSystem,WorldCoordinateSystem
   TYPE(CMISSDecompositionType) :: Decomposition
   TYPE(CMISSEquationsType) :: Equations
@@ -375,6 +377,11 @@ PROGRAM MONODOMAINEXAMPLE
 
   !Start the creation of the problem control loop
   CALL CMISSProblemControlLoopCreateStart(Problem,Err)
+  !Get the control loop
+  CALL CMISSControlLoopTypeInitialise(ControlLoop,Err)
+  CALL CMISSProblemControlLoopGet(Problem,CMISSControlLoopNode,ControlLoop,Err)
+  !Set the times
+  CALL CMISSControlLoopTimesSet(ControlLoop,0.0_CMISSDP,1.01_CMISSDP,0.01_CMISSDP,Err)
   !Finish creating the problem control loop
   CALL CMISSProblemControlLoopCreateFinish(Problem,Err)
  
@@ -387,8 +394,6 @@ PROGRAM MONODOMAINEXAMPLE
   CALL CMISSSolverOutputTypeSet(Solver,CMISSSolverProgressOutput,Err)
   !CALL CMISSSolverOutputTypeSet(Solver,CMISSSolverTimingOutput,Err)
   !CALL CMISSSolverOutputTypeSet(Solver,CMISSSolverSolverOutput,Err)
-  !Add in the CellML environment
-  CALL CMISSSolverCellMLAdd(Solver,CellML,CellMLIndex,Err)
   !Get the second (Parabolic) solver
   CALL CMISSSolverTypeInitialise(Solver,Err)
   CALL CMISSProblemSolverGet(Problem,CMISSControlLoopNode,2,Solver,Err)
@@ -399,6 +404,19 @@ PROGRAM MONODOMAINEXAMPLE
   CALL CMISSSolverOutputTypeSet(Solver,CMISSSolverSolverMatrixOutput,Err)
   !Finish the creation of the problem solver
   CALL CMISSProblemSolversCreateFinish(Problem,Err)
+
+  !Start the creation of the problem solver CellML equations
+  CALL CMISSProblemCellMLEquationsCreateStart(Problem,Err)
+  !Get the first solver  
+  !Get the CellML equations
+  CALL CMISSSolverTypeInitialise(Solver,Err)
+  CALL CMISSProblemSolverGet(Problem,CMISSControlLoopNode,1,Solver,Err)
+  CALL CMISSCellMLEquationsTypeInitialise(CellMLEquations,Err)
+  CALL CMISSSolverCellMLEquationsGet(Solver,CellMLEquations,Err)
+  !Add in the CellML environement
+  CALL CMISSCellMLEquationsCellMLAdd(CellMLEquations,CellML,CellMLIndex,Err)
+  !Finish the creation of the problem solver CellML equations
+  CALL CMISSProblemCellMLEquationsCreateFinish(Problem,Err)
 
   !Start the creation of the problem solver equations
   CALL CMISSProblemSolverEquationsCreateStart(Problem,Err)
