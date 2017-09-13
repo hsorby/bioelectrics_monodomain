@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 
 #DOC-START imports
-import sys, os, math
-# Make sure $OPENCMISS_ROOT/cm/bindings/python is first in our PYTHONPATH.
-sys.path.insert(1, os.path.join((os.environ['OPENCMISS_ROOT'],'cm','bindings','python')))
+import math
+
 
 # Intialise OpenCMISS
-from opencmiss import iron
+from opencmiss.iron import iron
 #DOC-END imports
 
 # Set problem parameters
@@ -169,7 +168,7 @@ noble98Model = cellML.ModelImport("n98.xml")
 # Now we have imported the model we are able to specify which variables from the model we want to set from openCMISS
 cellML.VariableSetAsKnown(noble98Model, "fast_sodium_current/g_Na")
 cellML.VariableSetAsKnown(noble98Model, "membrane/IStim")
-# and variables to get from the CellML 
+# and variables to get from the CellML
 cellML.VariableSetAsWanted(noble98Model, "membrane/i_K1")
 cellML.VariableSetAsWanted(noble98Model, "membrane/i_to")
 cellML.VariableSetAsWanted(noble98Model, "membrane/i_K")
@@ -210,19 +209,19 @@ cellML.ModelsFieldCreateFinish()
 #DOC-END define CellML models field
 
 #DOC-START define CellML state field
-#Create the CellML state field 
+#Create the CellML state field
 cellMLStateField = iron.Field()
 cellML.StateFieldCreateStart(cellMLStateFieldUserNumber, cellMLStateField)
 cellML.StateFieldCreateFinish()
 #DOC-END define CellML state field
 
 #DOC-START define CellML parameters and intermediate fields
-#Create the CellML parameters field 
+#Create the CellML parameters field
 cellMLParametersField = iron.Field()
 cellML.ParametersFieldCreateStart(cellMLParametersFieldUserNumber, cellMLParametersField)
 cellML.ParametersFieldCreateFinish()
 
-#  Create the CellML intermediate field 
+#  Create the CellML intermediate field
 cellMLIntermediateField = iron.Field()
 cellML.IntermediateFieldCreateStart(cellMLIntermediateFieldUserNumber, cellMLIntermediateField)
 cellML.IntermediateFieldCreateFinish()
@@ -308,7 +307,7 @@ solverEquations.sparsityType = iron.SolverEquationsSparsityTypes.SPARSE
 equationsSetIndex = solverEquations.EquationsSetAdd(equationsSet)
 problem.SolverEquationsCreateFinish()
 
-# Prescribe any boundary conditions 
+# Prescribe any boundary conditions
 boundaryConditions = iron.BoundaryConditions()
 solverEquations.BoundaryConditionsCreateStart(boundaryConditions)
 solverEquations.BoundaryConditionsCreateFinish()
