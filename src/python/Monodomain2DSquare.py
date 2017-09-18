@@ -2,11 +2,18 @@
 
 #DOC-START imports
 import math
+import sys
 
 
 # Intialise OpenCMISS
 from opencmiss.iron import iron
 #DOC-END imports
+
+print(sys.argv)
+if len(sys.argv) > 1:
+    cellml_file = sys.argv[1]
+else:
+    cellml_file = "n98.xml"
 
 # Set problem parameters
 #DOC-START parameters
@@ -161,7 +168,7 @@ materialsField.ComponentValuesInitialise(iron.FieldVariableTypes.U,iron.FieldPar
 cellML = iron.CellML()
 cellML.CreateStart(cellMLUserNumber, region)
 # Import a Nobel 98 cell model from a file
-noble98Model = cellML.ModelImport("n98.xml")
+noble98Model = cellML.ModelImport(cellml_file)
 #DOC-END create cellml environment
 
 #DOC-START flag variables
